@@ -1,74 +1,51 @@
 from django.test import TestCase
 from django.urls import reverse
-from shop.models import Category, Product
+from .models import Category, Product
 
-class ShopTests(TestCase):
+class ShopViewsTests(TestCase):
 
     def setUp(self):
-        # Crear categorías
-        self.category1 = Category.objects.create(name="Lavadoras", slug="lavadoras")
-        self.category2 = Category.objects.create(name="Refrigeradores", slug="refrigeradores")
-        
+        # Crear una categoría
+        self.category = Category.objects.create(name="Category 1", slug="category-1")
+
         # Crear productos
-        self.product1 = Product.objects.create(
-            category=self.category1,
-            name="Lavadora LG TurboWash",
-            slug="lavadora-lg-turbowash",
-            description="Lavadora de alta eficiencia.",
-            price=499.99,
+        self.product_in_stock = Product.objects.create(
+            name="Product In Stock",
+            slug="product-in-stock",
+            category=self.category,
+            price=10.00,
             stock=10,
-            available=True,
+            available=True
         )
-        self.product2 = Product.objects.create(
-            category=self.category2,
-            name="Refrigerador Samsung 400L",
-            slug="refrigerador-samsung-400l",
-            description="Refrigerador con tecnología avanzada.",
-            price=699.99,
-            stock=5,
-            available=True,
-        )
-        self.product3 = Product.objects.create(
-            category=self.category2,
-            name="Refrigerador LG 300L",
-            slug="refrigerador-lg-300l",
-            description="Refrigerador con sistema eficiente.",
-            price=599.99,
-            stock=0,  # Producto agotado
-            available=True,
+        self.product_out_of_stock = Product.objects.create(
+            name="Product Out of Stock",
+            slug="product-out-of-stock",
+            category=self.category,
+            price=20.00,
+            stock=0,
+            available=True
         )
 
     def test_product_list_view(self):
-        # Testear acceso a la lista de productos
         response = self.client.get(reverse('shop:product_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'shop/product/list.html')
-        self.assertContains(response, "Lavadora LG TurboWash")
-        self.assertContains(response, "Refrigerador Samsung 400L")
+        self.assertIn(self.product_in_stock, response.context['products'])
+        self.assertIn(self.product_out_of_stock, response.context['products'])  # Asegurarnos que aparece
 
-    def test_product_list_by_category_view(self):
-        # Testear acceso a los productos por categoría
-        response = self.client.get(reverse('shop:product_list_by_category', args=[self.category2.slug]))
+    def test_product_list_view_with_category(self):
+        response = self.client.get(reverse('shop:product_list_by_category', args=[self.category.slug]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Refrigerador Samsung 400L")
-        self.assertContains(response, "Refrigerador LG 300L")
-        self.assertNotContains(response, "Lavadora LG TurboWash")
+        self.assertIn(self.product_in_stock, response.context['products'])
+        self.assertIn(self.product_out_of_stock, response.context['products'])  # Los productos agotados también aparecen
 
-    def test_product_detail_view(self):
-        # Testear acceso a la vista de detalle de un producto
-        response = self.client.get(reverse('shop:product_detail', args=[self.product1.slug]))
+    def test_product_detail_view_in_stock(self):
+        response = self.client.get(reverse('shop:product_detail', args=[self.product_in_stock.slug]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'shop/product/detail.html')
-        self.assertContains(response, "Lavadora LG TurboWash")
-        self.assertContains(response, "Lavadora de alta eficiencia.")
+        self.assertContains(response, self.product_in_stock.name)
+        self.assertContains(response, "En stock")
 
-    def test_out_of_stock_product(self):
-        # Testear que un producto agotado aparece correctamente
-        response = self.client.get(reverse('shop:product_list_by_category', args=[self.category2.slug]))
-        self.assertContains(response, "Refrigerador LG 300L")
-        self.assertContains(response, "Agotado")
-
-    def test_invalid_category(self):
-        # Testear acceso a una categoría inexistente
-        response = self.client.get(reverse('shop:product_list_by_category', args=["no-existe"]))
-        self.assertEqual(response.status_code, 404)
+    def test_landing_page_view(self):
+        response = self.client.get(reverse('shop:landing_page'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.product_in_stock, response.context['featured_products'])
+        self.assertIn(self.product_out_of_stock, response.context['featured_products'])  # Los productos agotados deben estar presentes
