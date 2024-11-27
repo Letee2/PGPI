@@ -9,6 +9,7 @@ from django.conf import settings
 import stripe
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 def order_create(request):
     cart = Cart(request)
@@ -69,7 +70,7 @@ def handle_get_request(request, cart):
         form = OrderCreateForm()
 
     form.fields['delivery_method'].choices = delivery_choices
-    
+
     payment_form = PaymentMethodForm()
 
     return render(request, 'orders/order/create.html', {
@@ -137,26 +138,37 @@ def process_cash_on_delivery(order):
 def send_confirmation_email(order):
     send_mail(
         'Confirmación de Pedido',
-        f'Tu pedido ha sido creado con éxito.\n\nID de seguimiento: {order.tracking_id}\nTotal: {order.get_total_cost()} €\n\nGracias por tu compra.',
-        'info.ecommerce.pgpi@gmail.com',
+        f'''
+        Tu pedido ha sido creado con éxito.
+
+        ID de seguimiento: {order.tracking_id}
+        Total: {order.get_total_cost()} €
+        Dirección de entrega:
+        {order.address}
+        {order.postal_code}, {order.city}
+
+        Gracias por tu compra.
+        ''',
+        settings.EMAIL_HOST_USER,
         [order.email],
         fail_silently=False,
     )
-
-
 
 
 def order_track(request, tracking_id):
     order = get_object_or_404(Order, tracking_id=tracking_id)
     return render(request, 'orders/order/track.html', {'order': order})
 
-
 def order_track_form(request):
     if request.method == 'POST':
         tracking_id = request.POST.get('tracking_id')
-        return redirect('orders:order_track', tracking_id=tracking_id)
+        try:
+            order = get_object_or_404(Order, tracking_id=tracking_id)
+            return redirect('orders:order_track', tracking_id=order.tracking_id)
+        except:
+            error_message = "No se encontró ningún pedido con el ID de seguimiento proporcionado."
+            return render(request, 'orders/order/track_form.html', {'error': error_message})
     return render(request, 'orders/order/track_form.html')
-
 
 
 def order_created(request):

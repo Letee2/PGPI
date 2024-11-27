@@ -3,6 +3,11 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Seguimiento de Pedido</h2>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
