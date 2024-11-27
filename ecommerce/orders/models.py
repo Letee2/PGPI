@@ -1,6 +1,6 @@
 from django.db import models
 from shop.models import Product
-from django.contrib.auth.models import User
+from django.conf import settings
 
 class Order(models.Model):
     DELIVERY_CHOICES = [
@@ -16,7 +16,7 @@ class Order(models.Model):
         return sum(item.get_cost() for item in self.items.all()) + self.delivery_cost
 
 
-    user = models.ForeignKey(User, related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
     email = models.EmailField()
     address = models.TextField()
     postal_code = models.CharField(max_length=20)

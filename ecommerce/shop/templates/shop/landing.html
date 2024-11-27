@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center my-5">
+    <h1 class="display-4">Bienvenido a Nuestra Tienda de Electrodomésticos</h1>
+    <p class="lead">Descubre los mejores productos para tu hogar.</p>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg mt-3">Explorar el Catálogo</a>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Productos Destacados</h2>
+    <div class="row">
+        {% for product in featured_products %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.price }} €</p>
+                    {% if product.stock > 0 %}
+                        <p class="text-success">En stock</p>
+                    {% else %}
+                        <p class="text-danger">Agotado</p>
+                    {% endif %}
+                    <a href="{% url 'shop:product_detail' product.slug %}" class="btn btn-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

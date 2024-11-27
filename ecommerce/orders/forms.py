@@ -23,4 +23,5 @@ class PaymentMethodForm(forms.Form):
         ('cod', 'Contra Reembolso'),
         ('stripe', 'Tarjeta de Crédito (Stripe)'),
     ]
-    payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES, widget=forms.RadioSelect)
+    payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES, widget=forms.RadioSelect,label='Elija un método de pago')
+    

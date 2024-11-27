@@ -37,3 +37,9 @@ def product_detail(request, slug):
         return HttpResponseRedirect(reverse('shop:product_list'))
 
     return render(request, 'shop/product/detail.html', {'product': product})
+
+
+def landing_page(request):
+    # Seleccionar productos destacados para la landing page
+    featured_products = Product.objects.filter(available=True).order_by('-created')[:6]
+    return render(request, 'shop/landing.html', {'featured_products': featured_products})

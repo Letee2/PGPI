@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserRegistrationForm
+from .forms import CustomUserCreationForm
 from .forms import ProfileForm
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Te has registrado con éxito. ¡Ya puedes iniciar sesión!')
             return redirect('accounts:login')
     else:
-        form = UserRegistrationForm()
+        form = CustomUserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
 

@@ -1,14 +1,29 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile,CustomUser
 
-class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField()
+class CustomUserCreationForm(UserCreationForm):
+    password1 = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        help_text="La contraseña debe contener al menos 8 caracteres y no ser completamente numérica.",
+    )
+    password2 = forms.CharField(
+        label="Confirmar Contraseña",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        help_text="Introduce la misma contraseña para verificarla.",
+    )
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        model = CustomUser
+        fields = ['email']
+        labels = {
+            'email': 'Correo Electrónico',
+        }
+        widgets = {
+            'email': forms.EmailInput(attrs={"class": "form-control"}),
+        }
 
 class ProfileForm(forms.ModelForm):
     email = forms.EmailField(
