@@ -36,6 +36,8 @@ docker-compose build
 docker-compose up
 ```
 
+((EN OTRO TERMINAL))
+
 ### 3. Aplicar Migraciones
 ```bash
 docker-compose exec web python manage.py migrate
