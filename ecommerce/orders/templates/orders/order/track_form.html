@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Seguimiento de Pedido</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="tracking_id" class="form-label">ID de Seguimiento</label>
+            <input type="text" class="form-control" id="tracking_id" name="tracking_id" placeholder="Introduce tu ID de seguimiento">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar Pedido</button>
+    </form>
+</div>
+{% endblock %}

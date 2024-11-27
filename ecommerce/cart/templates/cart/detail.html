@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Carrito de Compras</h2>
+    {% if cart|length > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>
+                    <!-- Formulario para actualizar la cantidad -->
+                    <form action="{% url 'cart:cart_add' item.product.id %}" method="post" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" class="form-control w-25 me-2">
+                        <input type="hidden" name="override" value="True">
+                        <button type="submit" class="btn btn-secondary btn-sm">Actualizar</button>
+                    </form>
+                </td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.total_price }}</td>
+                <td>
+                    <!-- Formulario para eliminar el producto -->
+                    <form action="{% url 'cart:cart_remove' item.product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <h4>Total: {{ cart.get_total_price }} €</h4>
+        <a href="{% url 'orders:order_create' %}" class="btn btn-primary">Proceder al Pago</a>
+    </div>
+    {% else %}
+    <p class="text-center mt-4">Tu carrito está vacío. <a href="{% url 'shop:product_list' %}">¡Explora nuestros productos!</a></p>
+    {% endif %}
+</div>
+{% endblock %}

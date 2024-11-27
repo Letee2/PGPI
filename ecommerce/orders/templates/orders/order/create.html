@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Finalizar Compra</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h4>Método de Pago</h4>
+        {{ payment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Realizar Pedido</button>
+    </form>
+</div>
+{% endblock %}

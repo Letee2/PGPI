@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sidebar con categorías -->
+        <div class="col-md-3">
+            <h4>Categorías</h4>
+            <ul class="list-group">
+                {% for category in categories %}
+                    <li class="list-group-item {% if category == category %}active{% endif %}">
+                        <a href="{% url 'shop:product_list_by_category' category.slug %}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="col-md-9">
+            <!-- Barra de Búsqueda -->
+            <form method="get" action="{% url 'shop:product_list' %}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="query" placeholder="Buscar productos..." class="form-control" value="{{ request.GET.query }}">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+
+            <!-- Encabezado -->
+            <h1 class="my-4">
+                {% if category %}
+                    Productos en la categoría: {{ category.name }}
+                {% else %}
+                    Catálogo de Productos
+                {% endif %}
+            </h1>
+
+            <!-- Lista de Productos -->
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.price }} €</p>
+                                {% if product.stock > 0 %}
+                                    <p class="text-success">En stock</p>
+                                {% else %}
+                                    <p class="text-danger">Agotado</p>
+                                {% endif %}
+                                {% if product.stock > 0 %}
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">Ver detalles</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>Agotado</button>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No se encontraron productos.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
