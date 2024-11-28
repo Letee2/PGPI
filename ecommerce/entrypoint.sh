@@ -23,9 +23,7 @@ else:
     print("Superusuario admin@admin.com ya existe.")
 EOF
 
-# Recolectar archivos estáticos
-echo "Recolectando archivos estáticos..."
-python manage.py collectstatic --noinput
+
 
 # Iniciar el servidor
 echo "Iniciando el servidor..."
