@@ -14,6 +14,7 @@ def populate_shop():
         {"name": "Refrigeradores", "slug": "refrigeradores"},
         {"name": "Microondas", "slug": "microondas"},
         {"name": "Pequeños Electrodomésticos", "slug": "pequenos-electrodomesticos"},
+        {"name": "Aspiradoras", "slug": "aspiradoras"},
     ]
     
     category_objects = []
@@ -23,6 +24,7 @@ def populate_shop():
 
     # Crear productos con fabricante y algunos sin stock
     products = [
+        # Lavadoras
         {
             "name": "Lavadora LG TurboWash",
             "slug": "lavadora-lg-turbowash",
@@ -34,6 +36,17 @@ def populate_shop():
             "category": category_objects[0],
         },
         {
+            "name": "Lavadora Samsung EcoBubble",
+            "slug": "lavadora-samsung-ecobubble",
+            "description": "Lavadora silenciosa y ecológica con capacidad de 9kg.",
+            "price": 599.99,
+            "stock": 5,
+            "available": True,
+            "manufacturer": "Samsung",
+            "category": category_objects[0],
+        },
+        # Refrigeradores
+        {
             "name": "Refrigerador Samsung 400L",
             "slug": "refrigerador-samsung-400l",
             "description": "Refrigerador con tecnología de enfriamiento avanzado.",
@@ -43,6 +56,17 @@ def populate_shop():
             "manufacturer": "Samsung",
             "category": category_objects[1],
         },
+        {
+            "name": "Refrigerador LG InstaView",
+            "slug": "refrigerador-lg-instaview",
+            "description": "Refrigerador con puerta de vidrio y dispensador de agua.",
+            "price": 1099.99,
+            "stock": 3,
+            "available": True,
+            "manufacturer": "LG",
+            "category": category_objects[1],
+        },
+        # Microondas
         {
             "name": "Microondas Panasonic Compacto",
             "slug": "microondas-panasonic-compacto",
@@ -54,6 +78,17 @@ def populate_shop():
             "category": category_objects[2],
         },
         {
+            "name": "Microondas Whirlpool Digital",
+            "slug": "microondas-whirlpool-digital",
+            "description": "Microondas con pantalla digital y 10 programas automáticos.",
+            "price": 249.99,
+            "stock": 10,
+            "available": True,
+            "manufacturer": "Whirlpool",
+            "category": category_objects[2],
+        },
+        # Pequeños Electrodomésticos
+        {
             "name": "Cafetera Nespresso Inissia",
             "slug": "cafetera-nespresso-inissia",
             "description": "Cafetera compacta y fácil de usar.",
@@ -61,6 +96,16 @@ def populate_shop():
             "stock": 15,
             "available": True,
             "manufacturer": "Nespresso",
+            "category": category_objects[3],
+        },
+        {
+            "name": "Batidora Philips Viva",
+            "slug": "batidora-philips-viva",
+            "description": "Batidora de mano potente con múltiples accesorios.",
+            "price": 59.99,
+            "stock": 12,
+            "available": True,
+            "manufacturer": "Philips",
             "category": category_objects[3],
         },
         {
@@ -72,6 +117,27 @@ def populate_shop():
             "available": False,
             "manufacturer": "Philips",
             "category": category_objects[3],
+        },
+        # Aspiradoras
+        {
+            "name": "Aspiradora Dyson V11",
+            "slug": "aspiradora-dyson-v11",
+            "description": "Aspiradora inalámbrica con gran potencia de succión.",
+            "price": 599.99,
+            "stock": 7,
+            "available": True,
+            "manufacturer": "Dyson",
+            "category": category_objects[4],
+        },
+        {
+            "name": "Aspiradora Rowenta Compact Power",
+            "slug": "aspiradora-rowenta-compact-power",
+            "description": "Aspiradora con bolsa para una limpieza eficiente.",
+            "price": 149.99,
+            "stock": 10,
+            "available": True,
+            "manufacturer": "Rowenta",
+            "category": category_objects[4],
         },
     ]
 

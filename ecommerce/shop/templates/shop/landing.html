@@ -5,6 +5,15 @@
 <div class="container text-center my-5">
     <h1 class="display-4">Bienvenido a Nuestra Tienda de Electrodomésticos</h1>
     <p class="lead">Descubre los mejores productos para tu hogar.</p>
+
+    <!-- Barra de búsqueda -->
+    <form method="get" action="{% url 'shop:product_list' %}" class="mb-4 mt-4">
+        <div class="input-group">
+            <input type="text" name="query" placeholder="¿Qué necesitas comprar hoy?" class="form-control" value="{{ request.GET.query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
     <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg mt-3">Explorar el Catálogo</a>
 </div>
 

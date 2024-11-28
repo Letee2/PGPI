@@ -53,10 +53,16 @@ def handle_get_request(request, cart):
         ('standard', 'Entrega Estándar (5.00€)'),
         ('express', 'Entrega Express (10.00€)'),
     ]
-    # Añadir "Envío Gratuito" si el importe supera 100€
-    if cart.get_total_price() >= 100:
-        delivery_choices.append(('free', 'Envío Gratuito'))
 
+    # Modificar las opciones de entrega según el importe total del carrito
+    if cart.get_total_price() >= 100:
+        # Si el total es mayor o igual a 100€, solo mostrar "Envío Gratuito" y "Entrega Express"
+        delivery_choices = [
+            ('free', 'Envío Gratuito'),
+            ('express', 'Entrega Express (10.00€)'),
+        ]
+
+    # Crear el formulario de pedido con datos iniciales
     if request.user.is_authenticated:
         profile = request.user.profile
         initial_data = {
@@ -69,10 +75,13 @@ def handle_get_request(request, cart):
     else:
         form = OrderCreateForm()
 
+    # Asignar las opciones de entrega al campo correspondiente
     form.fields['delivery_method'].choices = delivery_choices
 
+    # Crear el formulario de método de pago
     payment_form = PaymentMethodForm()
 
+    # Renderizar la plantilla con los formularios y el carrito
     return render(request, 'orders/order/create.html', {
         'cart': cart,
         'form': form,
