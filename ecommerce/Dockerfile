@@ -24,4 +24,4 @@ EXPOSE 8000
 
 # Define entrypoint and default command
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "ecommerce.wsgi:application"]
